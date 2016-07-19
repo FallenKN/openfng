@@ -859,9 +859,13 @@ void CServer::ProcessClientPacket(CNetChunk *pPacket)
 			if(m_aClients[ClientID].m_State == CClient::STATE_AUTH)
 			{
 				char aVersion[64];
-				str_copy(aVersion, Unpacker.GetString(CUnpacker::SANITIZE_CC), 64);
+				str_copy(aVersion, Unpacker.GetString(CUnpacker::SANITIZE_CC), 64);				
+				if(!str_utf8_check(aVersion))
+					return;
+
 				bool CustClt = str_comp(aVersion, GameServer()->NetVersionCust()) == 0;
 				dbg_msg("es", "%s client connected!", CustClt?"cust":"vanilla");
+				
 				if(!CustClt && str_comp(aVersion, GameServer()->NetVersion()) != 0)
 				{
 					// wrong version
@@ -872,6 +876,9 @@ void CServer::ProcessClientPacket(CNetChunk *pPacket)
 				}
 
 				const char *pPassword = Unpacker.GetString(CUnpacker::SANITIZE_CC);
+				if(!str_utf8_check(pPassword))
+					return;
+
 				if(g_Config.m_Password[0] != 0 && str_comp(g_Config.m_Password, pPassword) != 0)
 				{
 					// wrong password
@@ -1005,6 +1012,8 @@ void CServer::ProcessClientPacket(CNetChunk *pPacket)
 		else if(Msg == NETMSG_RCON_CMD)
 		{
 			const char *pCmd = Unpacker.GetString();
+			if(!str_utf8_check(pCmd))
+				return;		
 
 			if(Unpacker.Error() == 0 && m_aClients[ClientID].m_Authed)
 			{
@@ -1025,6 +1034,8 @@ void CServer::ProcessClientPacket(CNetChunk *pPacket)
 			const char *pPw;
 			Unpacker.GetString(); // login name, not used
 			pPw = Unpacker.GetString(CUnpacker::SANITIZE_CC);
+			if(!str_utf8_check(pPw))
+				return;
 
 			if(Unpacker.Error() == 0)
 			{

@@ -1990,7 +1990,7 @@ int str_utf8_decode(const char **ptr)
 		unsigned char byte = str_byte_next(ptr);
 		if(utf8_bytes_needed == 0)
 		{
-			if(0x00 <= byte && byte <= 0x7F)
+			if(byte <= 0x7F)
 			{
 				return byte;
 			}
@@ -2042,18 +2042,13 @@ int str_utf8_decode(const char **ptr)
 
 int str_utf8_check(const char *str)
 {
-	while(*str)
+	int codepoint;
+	while((codepoint = str_utf8_decode(&str)))
 	{
-		if((*str&0x80) == 0x0)
-			str++;
-		else if((*str&0xE0) == 0xC0 && (*(str+1)&0xC0) == 0x80)
-			str += 2;
-		else if((*str&0xF0) == 0xE0 && (*(str+1)&0xC0) == 0x80 && (*(str+2)&0xC0) == 0x80)
-			str += 3;
-		else if((*str&0xF8) == 0xF0 && (*(str+1)&0xC0) == 0x80 && (*(str+2)&0xC0) == 0x80 && (*(str+3)&0xC0) == 0x80)
-			str += 4;
-		else
+		if(codepoint == -1)
+		{
 			return 0;
+		}
 	}
 	return 1;
 }
