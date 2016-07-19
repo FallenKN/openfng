@@ -320,13 +320,15 @@ int CServer::TrySetClientName(int ClientID, const char *pName)
 	Console()->Print(IConsole::OUTPUT_LEVEL_ADDINFO, "server", aBuf);
 	pName = aTrimmedName;
 
-	// make sure that two clients doesn't have the same name
+	// make sure that two clients don't have the same name
 	for(int i = 0; i < MAX_CLIENTS; i++)
+	{
 		if(i != ClientID && m_aClients[i].m_State >= CClient::STATE_READY)
 		{
-			if(str_comp(pName, m_aClients[i].m_aName) == 0)
+			if(str_utf8_comp_names(aTrimmedName, m_aClients[i].m_aName) == 0)
 				return -1;
 		}
+	}
 
 	// set the client name
 	str_copy(m_aClients[ClientID].m_aName, pName, MAX_NAME_LENGTH);
