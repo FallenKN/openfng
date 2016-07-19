@@ -161,6 +161,10 @@ public:
 	CRegister m_Register;
 	CMapChecker m_MapChecker;
 
+	bool m_ServerInfoHighLoad;
+	int64 m_ServerInfoFirstRequest;
+	int m_ServerInfoNumRequests;
+
 	CServer();
 
 	int TrySetClientName(int ClientID, const char *pName);
@@ -212,7 +216,8 @@ public:
 
 	void ProcessClientPacket(CNetChunk *pPacket);
 
-	void SendServerInfo(const NETADDR *pAddr, int Token);
+	void SendServerInfoConnless(const NETADDR *pAddr, int Token);
+	void SendServerInfo(const NETADDR *pAddr, int Token, int Offset=0, bool Short=false);
 	void UpdateServerInfo();
 
 	void PumpNetwork();
