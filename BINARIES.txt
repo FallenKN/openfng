@@ -1,2 +1,0 @@
-Binaries can be found in the "openfng-bin" branch in this repository.
-i.e. here: https://github.com/fstd/teeworlds/tree/openfng-bin
