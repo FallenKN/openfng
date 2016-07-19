@@ -1,5 +1,3 @@
-!! For precompiled binaries see https://github.com/fstd/teeworlds/tree/openfng-bin !!
-
 ++++++++++++++++ Teeworlds ++++++++++++++++ 
 Copyright (c) 2012 Magnus Auvinen
 
@@ -9,7 +7,7 @@ warranty. In no event will the authors be held liable for any damages
 arising from the use of this software.
 
 
-Please visit http://www.teeworlds.com for up-to-date information about 
+Please visit https://www.teeworlds.com for up-to-date information about 
 the game, including new versions, custom maps and much more.
 
 
@@ -26,7 +24,7 @@ to the source code available to others, when distributing modified
 versions of OpenFNG. This shall (not only) avoid the situation out of
 which OpenFNG was born in the first place.
 
-Master Repo: http://github.com/fstd/teeworlds
-Branch: openfng
+Master Repo: https://github.com/fstd/teeworlds/tree/openfng
+This Repo: https://github.com/FallenKN/openfng/
 
 IRC: #OpenFNG on Quakenet (irc.quakenet.org)
