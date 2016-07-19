@@ -78,6 +78,9 @@ public:
 	int GetHookTick() { return m_Core.m_HookTick; }//starts from 0 on every new hooking
 	int LastHammeredBy() { return m_HammeredBy; }
 	void ClearLastHammeredBy() { m_HammeredBy = -1; } 
+
+	void AddSpree();
+	void EndSpree(int Killer);
 private:
 	// player controlling this character
 	class CPlayer *m_pPlayer;

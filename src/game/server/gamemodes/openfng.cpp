@@ -410,6 +410,9 @@ void CGameControllerOpenFNG::HandleSacr(int Killer, int Victim, int ShrineTeam)
 		str_format(aBuf, sizeof aBuf, "%+d", Wrong?CFG(WrongSacrScore):(ShrineTeam == -1 ? CFG(SacrScore) : CFG(RightSacrScore)));
 		GS->CreateLolText(pPlKiller->GetCharacter(), false, vec2(0.f, -50.f), vec2(0.f, 0.f), 50, aBuf);
 	}
+
+	if(!Wrong && pPlKiller->GetCharacter())
+		GameServer()->GetPlayerChar(Killer)->AddSpree();
 }
 
 void CGameControllerOpenFNG::SendFreezeKill(int Killer, int Victim, int Weapon)
@@ -420,6 +423,8 @@ void CGameControllerOpenFNG::SendFreezeKill(int Killer, int Victim, int Weapon)
 	                      Victim, Server()->ClientName(Victim), Weapon);
 
 	GS->Console()->Print(IConsole::OUTPUT_LEVEL_DEBUG, "game", aBuf);
+
+	GameServer()->GetPlayerChar(Victim)->EndSpree(Killer);
 
 	// send the kill message
 	CNetMsg_Sv_KillMsg Msg;

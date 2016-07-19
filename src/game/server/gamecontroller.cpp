@@ -210,6 +210,14 @@ void IGameController::StartRound()
 {
 	ResetGame();
 
+	for(int i = 0; i < MAX_CLIENTS; i++)
+	{
+		if(GameServer()->m_apPlayers[i])
+		{
+			GameServer()->m_apPlayers[i]->m_Spree = 0;
+		}
+}
+
 	m_RoundStartTick = Server()->Tick();
 	m_SuddenDeath = 0;
 	m_GameOverTick = -1;

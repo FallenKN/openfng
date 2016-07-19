@@ -830,6 +830,8 @@ void CCharacter::Die(int Killer, int Weapon, bool NoKillMsg)
 		m_pPlayer->GetCID(), Server()->ClientName(m_pPlayer->GetCID()), Weapon, ModeSpecial);
 	GameServer()->Console()->Print(IConsole::OUTPUT_LEVEL_DEBUG, "game", aBuf);
 
+	EndSpree(Killer);
+
 	// send the kill message, except for when are sacrificed (openfng)
 	// because mod gamectrl will create it in that case
 	if (!NoKillMsg)
@@ -1027,4 +1029,37 @@ void CCharacter::Snap(int SnappingClient)
 	}
 
 	pCharacter->m_PlayerFlags = GetPlayer()->m_PlayerFlags;
+}
+
+void CCharacter::AddSpree()
+{
+	m_pPlayer->m_Spree++;
+	const int NumMsg = 5;
+	char aBuf[128];
+
+	if(m_pPlayer->m_Spree % 5 == 0)
+	{
+		char const *pSpreeMsg[NumMsg] = { "is on a killing spree", "is on a rampage", "is dominating", "is unstoppable", "is godlike"};
+		int No = m_pPlayer->m_Spree/NumMsg-1;
+
+		str_format(aBuf, sizeof(aBuf), "'%s %s with %d kills!", Server()->ClientName(m_pPlayer->GetCID()), pSpreeMsg[(No > NumMsg-1) ? NumMsg-1 : No], m_pPlayer->m_Spree);
+		GameServer()->SendChat(-1, CGameContext::CHAT_ALL, aBuf);
+	}
+}
+
+void CCharacter::EndSpree(int Killer)
+{
+	if(m_pPlayer->m_Spree >= 5)
+	{
+		GameServer()->CreateSound(m_Pos, SOUND_GRENADE_EXPLODE);
+		GameServer()->CreateExplosion(m_Pos, m_pPlayer->GetCID(), WEAPON_RIFLE, true);
+
+		char aBuf[128];
+		if(Server()->ClientName(m_pPlayer->GetCID()) != Server()->ClientName(Killer))
+			str_format(aBuf, sizeof(aBuf), "'%s' %d-kills killing spree was ended by '%s'", Server()->ClientName(m_pPlayer->GetCID()), m_pPlayer->m_Spree, Server()->ClientName(Killer));
+		else
+			str_format(aBuf, sizeof(aBuf), "'%s' has ended his own %d-kills killing spree", Server()->ClientName(m_pPlayer->GetCID()), m_pPlayer->m_Spree);
+		GameServer()->SendChat(-1, CGameContext::CHAT_ALL, aBuf);
+	}
+	m_pPlayer->m_Spree = 0;
 }

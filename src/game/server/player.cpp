@@ -22,6 +22,7 @@ CPlayer::CPlayer(CGameContext *pGameServer, int ClientID, int Team)
 	m_LastActionTick = Server()->Tick();
 	m_TeamChangeTick = Server()->Tick();
 	m_ChatScore = 0;
+	m_Spree = 0;
 }
 
 CPlayer::~CPlayer()
