@@ -301,6 +301,10 @@ int CServer::TrySetClientName(int ClientID, const char *pName)
 	if(!aTrimmedName[0])
 		return -1;
 
+	// check for names starting with '/'
+	if(aTrimmedName[0] == '/')
+		return -1;
+
 	// check if new and old name are the same
 	if(m_aClients[ClientID].m_aName[0] && str_comp(m_aClients[ClientID].m_aName, aTrimmedName) == 0)
 		return 0;
