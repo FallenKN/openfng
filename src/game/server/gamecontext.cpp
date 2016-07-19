@@ -405,6 +405,9 @@ void CGameContext::SwapTeams()
 
 	for(int i = 0; i < MAX_CLIENTS; ++i)
 	{
+		if(!m_pController->CanBeMovedOnBalance(i))
+			m_apPlayers[i]->GetCharacter()->Freeze(m_apPlayers[i]->GetCharacter()->GetFreezeTicks() - Tuning()->m_LaserDamage * Server()->TickSpeed());
+
 		if(m_apPlayers[i] && m_apPlayers[i]->GetTeam() != TEAM_SPECTATORS)
 			m_apPlayers[i]->SetTeam(m_apPlayers[i]->GetTeam()^1, false);
 	}
